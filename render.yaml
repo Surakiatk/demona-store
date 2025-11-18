@@ -1,0 +1,36 @@
+services:
+  # PostgreSQL Database
+  - type: pgsql
+    name: demona-db
+    plan: free
+    databaseName: demona_store
+    user: demona_user
+
+  # Backend API
+  - type: web
+    name: demona-backend
+    env: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: demona-db
+          property: connectionString
+      - key: ALLOWED_ORIGINS
+        sync: false
+        value: https://your-frontend.onrender.com,http://localhost:3000
+    healthCheckPath: /api/health
+
+  # Frontend
+  - type: web
+    name: demona-frontend
+    env: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: ./frontend/dist
+    envVars:
+      - key: VITE_API_URL
+        sync: false
+        value: https://demona-backend.onrender.com
+
