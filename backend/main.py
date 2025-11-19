@@ -22,6 +22,14 @@ app = FastAPI(
     version="1.0.0"
 )
 
+@app.on_event("startup")
+async def startup_event():
+    """Log startup information"""
+    import os
+    port = os.getenv("PORT", "8000")
+    logger.info(f"Starting server on port {port}")
+    logger.info(f"DATABASE_URL exists: {bool(os.getenv('DATABASE_URL'))}")
+
 # ตั้งค่า CORS
 import os
 
