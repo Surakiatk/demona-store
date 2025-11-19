@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { categoriesApi, Category } from '../api/services'
 import Modal from '../components/Modal'
-import { Plus, Edit, Trash2 } from 'lucide-react'
+import { Plus, Trash2 } from 'lucide-react'
 
 export default function CategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([])
